@@ -1,5 +1,19 @@
 ﻿@page "/"
 
-<h1>Hello, world!</h1>
+<p>Selecciona dos archivos y comparalos para visualizar las diferencias.</p>
 
-Welcome to your new app.
+<StepControl OnFinish="OnFinish">
+    <Step Name="paso-1" Title="Seleccionar el primer archivo">
+        Primer paso
+    </Step>
+    <Step Name="paso-2" Title="Seleccionar el segundo archivo">
+        Segundo paso
+    </Step>
+</StepControl>
+
+@code {
+    private void OnFinish()
+    {
+        // Hacer algo
+    }
+}

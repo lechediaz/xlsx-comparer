@@ -1,0 +1,72 @@
+﻿<CascadingValue Value="this">
+    @ChildContent
+</CascadingValue>
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter, EditorRequired]
+    public EventCallback OnFinish { get; set; }
+
+    public List<Step> Steps { get; private set; } = new();
+    public Step? ActiveStep { get; private set; }
+
+    public void Next(Step step)
+    {
+        Move(step, MoveDirection.Next);
+    }
+
+    public void Prev(Step step)
+    {
+        Move(step, MoveDirection.Prev);
+    }
+
+    private void Move(Step step, MoveDirection moveDirection)
+    {
+        int stepIndex = Steps.IndexOf(step);
+        stepIndex = moveDirection == MoveDirection.Next ? stepIndex + 1 : stepIndex - 1;
+        Step? nextStep = Steps.ElementAtOrDefault(stepIndex);
+        if (nextStep is not null)
+        {
+            ActiveStep = nextStep;
+            StateHasChanged();
+        }
+    }
+
+    public void AddStep(Step step)
+    {
+        step.IsLastStep = true;
+
+        if (!Steps.Any())
+        {
+            step.IsFirstStep = true;
+        }
+        else
+        {
+            Steps = Steps.Select(s =>
+            {
+                s.IsLastStep = false;
+                return s;
+            }).ToList();
+        }
+
+        Steps.Add(step);
+
+        if (ActiveStep is null)
+        {
+            ActivateStep(step);
+        }
+
+        StateHasChanged();
+    }
+
+    public void ActivateStep(Step step)
+    {
+        if (ActiveStep != step)
+        {
+            ActiveStep = step;
+            StateHasChanged();
+        }
+    }
+}

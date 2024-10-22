@@ -1,0 +1,79 @@
+﻿<section class="step">
+    <h3 @onclick="ActivateIfCompleted">
+        @Title @if (IsCompleted)
+        {
+            <span class="completed">
+                @CompletedText
+            </span>
+        }
+    </h3>
+    @if (Parent?.ActiveStep == this)
+    {
+        <div class="content">
+            @ChildContent
+        </div>
+        @if (ShowButtons)
+        {
+            <div class="buttons">
+                @if (!IsFirstStep)
+                {
+                    <button @onclick="() => Parent.Prev(this)">Atrás</button>
+                }
+                @if (!IsLastStep)
+                {
+                    <button disabled="@(!IsCompleted)" @onclick="() => Parent.Next(this)">Siguiente</button>
+                }
+                else
+                {
+                    <button disabled="@(!IsCompleted)" @onclick="() => Parent.OnFinish.InvokeAsync()">Terminar</button>
+                }
+            </div>
+        }
+    }
+</section>
+
+@code {
+    [CascadingParameter]
+    public StepControl? Parent { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter, EditorRequired]
+    public string Title { get; set; }
+
+    [Parameter, EditorRequired]
+    public string Name { get; set; }
+
+    [Parameter, EditorRequired]
+    public bool IsCompleted { get; set; }
+
+    [Parameter]
+    public string? CompletedText { get; set; } = "Completed!";
+
+    [Parameter]
+    public bool ShowButtons { get; set; } = true;
+
+
+    public bool IsFirstStep { get; set; }
+    public bool IsLastStep { get; set; }
+
+    protected override void OnInitialized()
+    {
+        if (Parent == null)
+        {
+            throw new ArgumentNullException(nameof(Parent), "Step must exist within a StepControl.");
+        }
+
+        base.OnInitialized();
+        Parent?.AddStep(this);
+    }
+
+    private void ActivateIfCompleted()
+    {
+        if (IsCompleted)
+        {
+            Parent?.ActivateStep(this);
+        }
+    }
+}

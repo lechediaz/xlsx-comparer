@@ -40,10 +40,10 @@
     public RenderFragment? ChildContent { get; set; }
 
     [Parameter, EditorRequired]
-    public string Title { get; set; }
+    public string Title { get; set; } = null!;
 
     [Parameter, EditorRequired]
-    public string Name { get; set; }
+    public string Name { get; set; } = null!;
 
     [Parameter, EditorRequired]
     public bool IsCompleted { get; set; }

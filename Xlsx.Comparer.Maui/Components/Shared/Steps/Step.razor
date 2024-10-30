@@ -1,5 +1,5 @@
-﻿<section class="step">
-    <h3 @onclick="ActivateIfCompleted">
+﻿<section class="step @(Parent?.ActiveStep == this ? "current" : null)">
+    <h3 class="title" @onclick="ActivateIfCompleted">
         @Title @if (IsCompleted)
         {
             <span class="completed">
@@ -9,26 +9,28 @@
     </h3>
     @if (Parent?.ActiveStep == this)
     {
-        <div class="content">
-            @ChildContent
-        </div>
-        @if (ShowButtons)
-        {
-            <div class="buttons">
-                @if (!IsFirstStep)
-                {
-                    <button @onclick="() => Parent.Prev(this)">Atrás</button>
-                }
-                @if (!IsLastStep)
-                {
-                    <button disabled="@(!IsCompleted)" @onclick="() => Parent.Next(this)">Siguiente</button>
-                }
-                else
-                {
-                    <button disabled="@(!IsCompleted)" @onclick="() => Parent.OnFinish.InvokeAsync()">Terminar</button>
-                }
+        <div class="container">
+            <div class="content">
+                @ChildContent
             </div>
-        }
+            @if (ShowButtons)
+            {
+                <div class="buttons">
+                    @if (!IsFirstStep)
+                    {
+                        <button @onclick="() => Parent.Prev(this)">Atrás</button>
+                    }
+                    @if (!IsLastStep)
+                    {
+                        <button disabled="@(!IsCompleted)" @onclick="() => Parent.Next(this)">Siguiente</button>
+                    }
+                    else
+                    {
+                        <button disabled="@(!IsCompleted)" @onclick="() => Parent.OnFinish.InvokeAsync()">Terminar</button>
+                    }
+                </div>
+            }
+        </div>
     }
 </section>
 
@@ -49,7 +51,7 @@
     public bool IsCompleted { get; set; }
 
     [Parameter]
-    public string? CompletedText { get; set; } = "Completed!";
+    public string? CompletedText { get; set; } = "✔️";
 
     [Parameter]
     public bool ShowButtons { get; set; } = true;

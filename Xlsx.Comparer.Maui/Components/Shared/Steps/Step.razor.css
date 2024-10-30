@@ -1,0 +1,62 @@
+﻿.step {
+    background-color: rgb(11, 35, 99);
+    color: rgb(255,255,255);
+    padding: 10px;
+}
+
+    .step.current {
+        background-color: rgb(63, 103, 208);
+    }
+
+    .step > h3 {
+        font-size: 1.3em;
+        margin: 0px;
+    }
+
+        .step > h3 > span.completed {
+            font-size: 1em;
+            margin-left: 5px;
+        }
+
+    .step > .container {
+        display: flex;
+        flex-flow: row;
+        justify-content: space-between;
+        padding-top: 10px;
+    }
+
+        .step > .container > .content {
+            padding: 0px;
+        }
+
+        .step > .container > .buttons {
+            display: flex;
+            flex-flow: row;
+            justify-content: space-evenly;
+            flex-basis: 160px;
+        }
+
+            .step > .container > .buttons > button {
+                background-color: rgb(255, 255, 255);
+                border-radius: 8%;
+                border: 1px solid rgb(111, 111, 111);
+                font-size: .9em;
+                padding: 5px 10px;
+            }
+
+                .step > .container > .buttons > button:hover {
+                    background-color: rgb(225, 229, 243);
+                }
+
+@media screen and (max-width: 790px) {
+
+
+    .step > .container, .step > .container > .buttons {
+        flex-basis: initial;
+        flex-flow: column;
+    }
+
+        .step > .container > .buttons {
+            margin-top: 10px;
+        }
+}

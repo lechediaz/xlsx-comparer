@@ -3,15 +3,34 @@
 <p>Selecciona dos archivos y comparalos para visualizar las diferencias.</p>
 
 <StepControl OnFinish="OnFinish">
-    <Step Name="paso-1" Title="Seleccionar el primer archivo">
-        Primer paso
+    <Step Name="paso-1" Title="Seleccionar el primer archivo" IsCompleted="file1 is not null">
+        <InputFile OnChange="e => OnFileSelected(e)" />
     </Step>
-    <Step Name="paso-2" Title="Seleccionar el segundo archivo">
-        Segundo paso
+    <Step Name="paso-2" Title="Seleccionar el segundo archivo" IsCompleted="file2 is not null">
+        <InputFile OnChange="e => OnFileSelected(e, false)" />
     </Step>
 </StepControl>
 
 @code {
+    private IBrowserFile? file1;
+    private IBrowserFile? file2;
+
+    private void OnFileSelected(InputFileChangeEventArgs e, bool isFirstFile = true)
+    {
+        IBrowserFile? file = e.FileCount > 0 ? e.File : null;
+
+
+        if (isFirstFile)
+        {
+            file1 = file;
+        }
+        else
+        {
+            file2 = file;
+        }
+    }
+
+
     private void OnFinish()
     {
         // Hacer algo

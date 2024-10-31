@@ -1,38 +1,160 @@
 ﻿@page "/"
+@using ClosedXML.Excel
 
 <p>Selecciona dos archivos y comparalos para visualizar las diferencias.</p>
 
-<StepControl OnFinish="OnFinish">
-    <Step Name="paso-1" Title="Seleccionar el primer archivo" IsCompleted="file1 is not null">
-        <InputFile OnChange="e => OnFileSelected(e)" />
+<StepControl OnFinish="OnFinishAsync" FinishButtonText="Comparar">
+    <Step Name="paso-1" Title="Seleccionar el primer archivo" IsCompleted="filesSelected[0].IsSelected">
+        <button class="btn btn-dark" @onclick="() => SelectFileAsync()">@(filesSelected[0].IsSelected ? "Cambiar" : "Seleccionar")</button>
     </Step>
-    <Step Name="paso-2" Title="Seleccionar el segundo archivo" IsCompleted="file2 is not null">
-        <InputFile OnChange="e => OnFileSelected(e, false)" />
+    <Step Name="paso-2" Title="Seleccionar el segundo archivo" IsCompleted="filesSelected[1].IsSelected">
+        <button class="btn btn-dark" @onclick="() => SelectFileAsync(1)">@(filesSelected[1].IsSelected ? "Cambiar" : "Seleccionar")</button>
     </Step>
 </StepControl>
 
+@if (!string.IsNullOrEmpty(comparationFilePath))
+{
+    <div class="alert alert-success mt-2">
+        <p>
+            Se ha generado el archivo XLSX con las diferencias en la ruta: <code>@comparationFilePath</code>
+        </p>
+        <p class="mb-0">
+            Recuerde que lo que se añadió en el segundo archivo se encuentra de color verde, lo que modificó en naranja y lo que eliminó en rojo.
+        </p>
+        <button class="btn btn-success mt-2" @onclick="OnShareButtonClickAsync">Compartir</button>
+    </div>
+}
+
 @code {
-    private IBrowserFile? file1;
-    private IBrowserFile? file2;
-
-    private void OnFileSelected(InputFileChangeEventArgs e, bool isFirstFile = true)
+    private SelectedFileDto[] filesSelected = new[]
     {
-        IBrowserFile? file = e.FileCount > 0 ? e.File : null;
+        new SelectedFileDto(false, string.Empty),
+        new SelectedFileDto(false, string.Empty),
+    };
 
+    private string comparationFilePath = string.Empty;
 
-        if (isFirstFile)
+    private async Task SelectFileAsync(int fileIndex = 0)
+    {
+        filesSelected[fileIndex] = new SelectedFileDto(false, string.Empty);
+
+        var extensions = new[] { ".xlsx" };
+        var customFileType = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>{
+                { DevicePlatform.iOS, extensions },
+                { DevicePlatform.Android, extensions },
+                { DevicePlatform.WinUI, extensions },
+                { DevicePlatform.Tizen, extensions },
+                { DevicePlatform.macOS, extensions },
+        });
+
+        var pickOptions = new PickOptions()
+            {
+                PickerTitle = "Por favor seleccione un archivo XLSX",
+                FileTypes = customFileType
+            };
+
+        // Request to pick the file from device
+        // About FilePicker: https://learn.microsoft.com/en-us/dotnet/maui/platform-integration/storage/file-picker?view=net-maui-8.0&tabs=windows#pick-a-file
+        FileResult? fileResult = await FilePicker.Default.PickAsync(pickOptions);
+
+        if (fileResult is null)
         {
-            file1 = file;
+            await App.Current!.MainPage!.DisplayAlert("Información", "Por favor seleccione un archivo XLSX", "Ok");
+            return;
         }
-        else
-        {
-            file2 = file;
-        }
+
+        filesSelected[fileIndex] = new SelectedFileDto(true, fileResult.FullPath);
     }
 
 
-    private void OnFinish()
+    private async Task OnFinishAsync()
     {
-        // Hacer algo
+        comparationFilePath = string.Empty;
+
+        using (var wb1 = new XLWorkbook(filesSelected[0].FullPath))
+        {
+            IXLWorksheet? sheet1 = wb1.Worksheets.FirstOrDefault();
+
+            if (sheet1 is null)
+            {
+                await App.Current!.MainPage!.DisplayAlert("Información", "El archivo 1 no tiene hojas, por favor escoja un archivo XLSX con hojas.", "Ok");
+                return;
+            }
+
+            using (var wb2 = new XLWorkbook(filesSelected[1].FullPath))
+            {
+                IXLWorksheet? sheet2 = wb2.Worksheets.FirstOrDefault();
+
+                if (sheet2 is null)
+                {
+                    await App.Current!.MainPage!.DisplayAlert("Información", "El archivo 2 no tiene hojas, por favor escoja un archivo XLSX con hojas.", "Ok");
+                    return;
+                }
+
+                int maxRowsCount = Math.Max(sheet1.RowsUsed().Count(), sheet2.RowsUsed().Count());
+                int maxColumnsCount = Math.Max(sheet1.ColumnsUsed().Count(), sheet2.ColumnsUsed().Count());
+
+                // Compare
+
+                using (var wbDiff = new XLWorkbook())
+                {
+                    var wsDiff = wbDiff.Worksheets.Add("Diferencias");
+
+                    for (int rowIndex = 1; rowIndex <= maxRowsCount; rowIndex++)
+                    {
+                        for (int columnIndex = 1; columnIndex <= maxColumnsCount; columnIndex++)
+                        {
+                            IXLCell cell1 = sheet1.Cell(rowIndex, columnIndex);
+                            IXLCell cell2 = sheet2.Cell(rowIndex, columnIndex);
+                            IXLCell cellDiff = wsDiff.Cell(rowIndex, columnIndex);
+
+                            // About styling: https://github.com/closedxml/closedxml/wiki/Styles-Fill
+                            if (!cell2.IsEmpty())
+                            {
+                                cellDiff.Value = cell2.Value;
+
+                                if (cell1.IsEmpty())
+                                {
+                                    // The cell was added in second file.
+                                    cellDiff.Style.Fill.BackgroundColor = XLColor.PastelGreen;
+
+                                }
+                                else if (cell2.GetString() != cell1.GetString())
+                                {
+                                    // The cell was modified in second file.
+                                    cellDiff.Style.Fill.BackgroundColor = XLColor.PastelOrange;
+                                }
+                            }
+                            else if (!cell1.IsEmpty())
+                            {
+                                cellDiff.Value = cell1.Value;
+
+                                // The cell was deleted in second file.
+                                cellDiff.Style.Fill.BackgroundColor = XLColor.PastelRed;
+                            }
+                        }
+                    }
+
+                    wsDiff.Columns().AdjustToContents();
+
+                    string timestampString = DateTime.Now.ToString("yyyy-MM-dd-HHmmss");
+
+                    // About AppDataDirectory: https://learn.microsoft.com/en-us/dotnet/maui/platform-integration/storage/file-system-helpers?view=net-maui-8.0&tabs=windows#app-data-directory
+                    comparationFilePath = Path.Combine(FileSystem.AppDataDirectory, $"Diferencias-{timestampString}.xlsx");
+
+                    wbDiff.SaveAs(comparationFilePath);
+                }
+            }
+        }
+    }
+
+    private async Task OnShareButtonClickAsync()
+    {
+        // About Share files: https://learn.microsoft.com/en-us/dotnet/maui/platform-integration/data/share?view=net-maui-8.0&tabs=windows#share-a-file
+        await Share.Default.RequestAsync(new ShareFileRequest
+            {
+                Title = "Compartir diferencias de los archivos XLSX",
+                File = new ShareFile(comparationFilePath)
+            });
     }
 }

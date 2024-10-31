@@ -5,7 +5,8 @@
 }
 
     .step.current {
-        background-color: rgb(63, 103, 208);
+        background-color: rgb(211, 221, 246);
+        color: rgb(36, 36, 36);
     }
 
     .step > h3 {
@@ -29,30 +30,8 @@
             padding: 0px;
         }
 
-        .step > .container > .buttons {
-            display: flex;
-            flex-flow: row;
-            justify-content: space-evenly;
-            flex-basis: 160px;
-        }
-
-            .step > .container > .buttons > button {
-                background-color: rgb(255, 255, 255);
-                border-radius: 8%;
-                border: 1px solid rgb(111, 111, 111);
-                font-size: .9em;
-                padding: 5px 10px;
-            }
-
-                .step > .container > .buttons > button:hover {
-                    background-color: rgb(225, 229, 243);
-                }
-
 @media screen and (max-width: 790px) {
-
-
-    .step > .container, .step > .container > .buttons {
-        flex-basis: initial;
+    .step > .container {
         flex-flow: column;
     }
 

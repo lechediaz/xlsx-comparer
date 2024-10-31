@@ -9,6 +9,9 @@
     [Parameter, EditorRequired]
     public EventCallback OnFinish { get; set; }
 
+    [Parameter]
+    public string FinishButtonText { get; set; } = "Finalizar";
+
     public List<Step> Steps { get; private set; } = new();
     public Step? ActiveStep { get; private set; }
 

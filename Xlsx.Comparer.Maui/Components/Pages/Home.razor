@@ -1,47 +1,60 @@
 ﻿@page "/"
 @using ClosedXML.Excel
+@using CommunityToolkit.Maui.Alerts
+@using CommunityToolkit.Maui.Storage
 
-<p>Selecciona dos archivos y comparalos para visualizar las diferencias.</p>
+<p>Selecciona dos archivos de Excel y comparelos para visualizar las diferencias.</p>
 
-<StepControl OnFinish="OnFinishAsync" FinishButtonText="Comparar">
-    <Step Name="paso-1" Title="Seleccionar el primer archivo" IsCompleted="filesSelected[0].IsSelected">
-        <button class="btn btn-dark" @onclick="() => SelectFileAsync()">@(filesSelected[0].IsSelected ? "Cambiar" : "Seleccionar")</button>
+<StepControl OnFinish="OnFinishAsync" FinishButtonText="Comparar" Disabled="@_comparing">
+    <Step Title="Seleccionar el primer archivo" IsCompleted="_filesSelected[0].IsSelected">
+        <button class="btn btn-dark" disabled="@_comparing" @onclick="() => SelectFileAsync()">@(_filesSelected[0].IsSelected ? "Cambiar" : "Seleccionar")</button>
     </Step>
-    <Step Name="paso-2" Title="Seleccionar el segundo archivo" IsCompleted="filesSelected[1].IsSelected">
-        <button class="btn btn-dark" @onclick="() => SelectFileAsync(1)">@(filesSelected[1].IsSelected ? "Cambiar" : "Seleccionar")</button>
+    <Step Title="Seleccionar el segundo archivo" IsCompleted="_filesSelected[1].IsSelected">
+        <button class="btn btn-dark" disabled="@_comparing" @onclick="() => SelectFileAsync(1)">@(_filesSelected[1].IsSelected ? "Cambiar" : "Seleccionar")</button>
     </Step>
 </StepControl>
+
+@if (_comparing)
+{
+    <div class="alert alert-info mt-2">
+        Estoy comparando los archivos, por favor espere :)
+    </div>
+}
 
 @if (!string.IsNullOrEmpty(comparationFilePath))
 {
     <div class="alert alert-success mt-2">
         <p>
-            Se ha generado el archivo XLSX con las diferencias en la ruta: <code>@comparationFilePath</code>
+            !Listo!, generé un nuevo archivo de Excel con las diferencias entre ambos. Recuerda que lo que se añadió en el segundo archivo se encuentra de color verde,
+            lo que se modificó está en color naranja y lo que se eliminó en color rojo.
         </p>
-        <p class="mb-0">
-            Recuerde que lo que se añadió en el segundo archivo se encuentra de color verde, lo que modificó en naranja y lo que eliminó en rojo.
-        </p>
-        <button class="btn btn-success mt-2" @onclick="OnShareButtonClickAsync">Compartir</button>
+        <div class="btn-group mt-2">
+            <button class="btn btn-primary" @onclick="OnSaveFileClickAsync">Guardar archivo con diferencias</button>
+            <button class="btn btn-success" @onclick="OnShareButtonClickAsync">Compartir archivo con diferencias</button>
+        </div>
     </div>
 }
 
 @code {
-    private SelectedFileDto[] filesSelected = new[]
+    private SelectedFileDto[] _filesSelected = new[]
     {
         new SelectedFileDto(false, string.Empty),
         new SelectedFileDto(false, string.Empty),
     };
 
+    private bool _comparing = false;
+
     private string comparationFilePath = string.Empty;
 
     private async Task SelectFileAsync(int fileIndex = 0)
     {
-        filesSelected[fileIndex] = new SelectedFileDto(false, string.Empty);
+        _filesSelected[fileIndex] = new SelectedFileDto(false, string.Empty);
 
         var extensions = new[] { ".xlsx" };
         var customFileType = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>{
                 { DevicePlatform.iOS, extensions },
-                { DevicePlatform.Android, extensions },
+                // For Android: https://learn.microsoft.com/es-es/dotnet/maui/platform-integration/storage/file-picker?view=net-maui-8.0&tabs=android
+                { DevicePlatform.Android, new []{ "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" } },
                 { DevicePlatform.WinUI, extensions },
                 { DevicePlatform.Tizen, extensions },
                 { DevicePlatform.macOS, extensions },
@@ -49,7 +62,7 @@
 
         var pickOptions = new PickOptions()
             {
-                PickerTitle = "Por favor seleccione un archivo XLSX",
+                PickerTitle = "Por favor seleccione un archivo de Excel",
                 FileTypes = customFileType
             };
 
@@ -59,35 +72,37 @@
 
         if (fileResult is null)
         {
-            await App.Current!.MainPage!.DisplayAlert("Información", "Por favor seleccione un archivo XLSX", "Ok");
+            await App.Current!.MainPage!.DisplayAlert("Información", "Por favor seleccione un archivo de Excel.", "Ok");
             return;
         }
 
-        filesSelected[fileIndex] = new SelectedFileDto(true, fileResult.FullPath);
+        _filesSelected[fileIndex] = new SelectedFileDto(true, fileResult.FullPath);
     }
-
 
     private async Task OnFinishAsync()
     {
         comparationFilePath = string.Empty;
+        _comparing = true;
 
-        using (var wb1 = new XLWorkbook(filesSelected[0].FullPath))
+        await Task.Delay(1000);
+
+        using (var wb1 = new XLWorkbook(_filesSelected[0].FullPath))
         {
             IXLWorksheet? sheet1 = wb1.Worksheets.FirstOrDefault();
 
             if (sheet1 is null)
             {
-                await App.Current!.MainPage!.DisplayAlert("Información", "El archivo 1 no tiene hojas, por favor escoja un archivo XLSX con hojas.", "Ok");
+                await App.Current!.MainPage!.DisplayAlert("Información", "El primer archivo no tiene hojas, por favor escoja un archivo de Excel con hojas.", "Ok");
                 return;
             }
 
-            using (var wb2 = new XLWorkbook(filesSelected[1].FullPath))
+            using (var wb2 = new XLWorkbook(_filesSelected[1].FullPath))
             {
                 IXLWorksheet? sheet2 = wb2.Worksheets.FirstOrDefault();
 
                 if (sheet2 is null)
                 {
-                    await App.Current!.MainPage!.DisplayAlert("Información", "El archivo 2 no tiene hojas, por favor escoja un archivo XLSX con hojas.", "Ok");
+                    await App.Current!.MainPage!.DisplayAlert("Información", "El segundo archivo no tiene hojas, por favor escoja un archivo de Excel con hojas.", "Ok");
                     return;
                 }
 
@@ -139,12 +154,32 @@
 
                     string timestampString = DateTime.Now.ToString("yyyy-MM-dd-HHmmss");
 
-                    // About AppDataDirectory: https://learn.microsoft.com/en-us/dotnet/maui/platform-integration/storage/file-system-helpers?view=net-maui-8.0&tabs=windows#app-data-directory
-                    comparationFilePath = Path.Combine(FileSystem.AppDataDirectory, $"Diferencias-{timestampString}.xlsx");
-
+                    // About CacheDirectory: https://learn.microsoft.com/en-us/dotnet/maui/platform-integration/storage/file-system-helpers?view=net-maui-8.0&tabs=windows#cache-directory
+                    comparationFilePath = Path.Combine(FileSystem.Current.CacheDirectory, $"Diferencias-{timestampString}.xlsx");
                     wbDiff.SaveAs(comparationFilePath);
                 }
             }
+        }
+
+        _comparing = false;
+    }
+
+    private async Task OnSaveFileClickAsync()
+    {
+        CancellationToken cancellationToken = new CancellationTokenSource().Token;
+        string fileName = Path.GetFileName(comparationFilePath);
+        using Stream readStream = File.OpenRead(comparationFilePath);
+
+        // About https://learn.microsoft.com/en-us/dotnet/communitytoolkit/maui/essentials/file-saver
+        var fileSaverResult = await FileSaver.Default.SaveAsync(string.Empty, fileName, readStream, cancellationToken);
+
+        if (fileSaverResult.IsSuccessful)
+        {
+            await Toast.Make("El archivo se guardó correctamente").Show(cancellationToken);
+        }
+        else
+        {
+            await Toast.Make($"Ocurrió un error al guardar el archivo: {fileSaverResult.Exception.Message}").Show(cancellationToken);
         }
     }
 

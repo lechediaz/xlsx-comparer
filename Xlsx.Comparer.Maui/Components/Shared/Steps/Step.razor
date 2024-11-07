@@ -18,15 +18,15 @@
                 <div class="btn-group buttons">
                     @if (!IsFirstStep)
                     {
-                        <button class="btn btn-primary" @onclick="OnPrevButtonClick">Atrás</button>
+                        <button class="btn btn-primary" disabled="@Parent!.Disabled" @onclick="OnPrevButtonClick">Atrás</button>
                     }
                     @if (!IsLastStep)
                     {
-                        <button class="btn btn-primary" disabled="@(!IsCompleted)" @onclick="OnNextButtonClick">Siguiente</button>
+                        <button class="btn btn-primary" disabled="@(!IsCompleted || Parent!.Disabled)" @onclick="OnNextButtonClick">Siguiente</button>
                     }
                     else
                     {
-                        <button class="btn btn-success" disabled="@(!IsCompleted)" @onclick="OnFinishButtonClick">@Parent?.FinishButtonText</button>
+                        <button class="btn btn-success" disabled="@(!IsCompleted || Parent!.Disabled)" @onclick="OnFinishButtonClick">@Parent!.FinishButtonText</button>
                     }
                 </div>
             }
@@ -43,9 +43,6 @@
 
     [Parameter, EditorRequired]
     public string Title { get; set; } = null!;
-
-    [Parameter, EditorRequired]
-    public string Name { get; set; } = null!;
 
     [Parameter, EditorRequired]
     public bool IsCompleted { get; set; }

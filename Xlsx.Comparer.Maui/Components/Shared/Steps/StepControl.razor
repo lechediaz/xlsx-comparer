@@ -12,6 +12,9 @@
     [Parameter]
     public string FinishButtonText { get; set; } = "Finalizar";
 
+    [Parameter]
+    public bool Disabled { get; set; } = false;
+
     public List<Step> Steps { get; private set; } = new();
     public Step? ActiveStep { get; private set; }
 

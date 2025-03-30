@@ -1,8 +1,188 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="456" height="456" viewBox="0 0 456 456" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
-    <path d="m 105.50037,281.60863 c -2.70293,0 -5.00091,-0.90042 -6.893127,-2.70209 -1.892214,-1.84778 -2.837901,-4.04181 -2.837901,-6.58209 0,-2.58722 0.945687,-4.80389 2.837901,-6.65167 1.892217,-1.84778 4.190197,-2.77167 6.893127,-2.77167 2.74819,0 5.06798,0.92389 6.96019,2.77167 1.93749,1.84778 2.90581,4.06445 2.90581,6.65167 0,2.54028 -0.96832,4.73431 -2.90581,6.58209 -1.89221,1.80167 -4.212,2.70209 -6.96019,2.70209 z" style="fill:#ffffff;fill-rule:nonzero;stroke-width:0.838376" />
-    <path d="M 213.56111,280.08446 H 195.99044 L 149.69953,207.0544 c -1.17121,-1.84778 -2.14037,-3.76515 -2.90581,-5.75126 h -0.40578 c 0.36051,2.12528 0.54076,6.67515 0.54076,13.6496 v 65.13172 h -15.54349 v -99.36009 h 18.71925 l 44.7374,71.29798 c 1.89222,2.95695 3.1087,4.98917 3.64945,6.09751 h 0.26996 c -0.45021,-2.6325 -0.67573,-7.09015 -0.67573,-13.37293 v -64.02256 h 15.47557 z" style="fill:#ffffff;fill-rule:nonzero;stroke-width:0.838376" />
-    <path d="m 289.25134,280.08446 h -54.40052 v -99.36009 h 52.23835 v 13.99669 h -36.15411 v 28.13085 h 33.31621 v 13.9271 h -33.31621 v 29.37835 h 38.31628 z" style="fill:#ffffff;fill-rule:nonzero;stroke-width:0.838376" />
-    <path d="M 366.56466,194.72106 H 338.7222 v 85.3634 h -16.08423 v -85.3634 h -27.77455 v -13.99669 h 71.70124 z" style="fill:#ffffff;fill-rule:nonzero;stroke-width:0.838376" />
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="456"
+   height="456"
+   viewBox="0 0 456 456"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
+   sodipodi:docname="appicon.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="false"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="px"
+     showguides="true"
+     inkscape:zoom="1.1255704"
+     inkscape:cx="206.56194"
+     inkscape:cy="226.99602"
+     inkscape:window-width="1150"
+     inkscape:window-height="823"
+     inkscape:window-x="683"
+     inkscape:window-y="142"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer3" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="ArchivoA"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#5aa02c;stroke-width:1.07874"
+       id="rect1"
+       width="233.5835"
+       height="324.73557"
+       x="23.177979"
+       y="45.661987"
+       ry="25.583193"
+       transform="matrix(0.99713842,-0.07559748,0.06950505,0.9975816,0,0)"
+       inkscape:label="FondoA" />
+    <g
+       id="g55"
+       inkscape:label="Tabla"
+       transform="matrix(-0.78125439,0,0,0.7836054,426.50174,-4.7578632)"
+       style="fill:#e6e6e6">
+      <rect
+         style="fill:#b3b3b3;fill-opacity:1;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect51"
+         width="126.5865"
+         height="32.039265"
+         x="226.00436"
+         y="194.6731"
+         ry="4.7116628"
+         transform="rotate(4.503073)" />
+      <rect
+         style="fill:#e6e6e6;fill-opacity:1;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect52"
+         width="126.5865"
+         height="32.039265"
+         x="361.46719"
+         y="194.6989"
+         ry="4.7116628"
+         transform="rotate(4.503073)" />
+      <rect
+         style="fill:#cccccc;fill-opacity:1;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect53"
+         width="126.5865"
+         height="32.039265"
+         x="224.89883"
+         y="236.96274"
+         ry="4.7116628"
+         transform="rotate(4.503073)" />
+      <rect
+         style="fill:#e6e6e6;fill-opacity:1;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect54"
+         width="126.5865"
+         height="32.039265"
+         x="362.21741"
+         y="236.23077"
+         ry="4.7116628"
+         transform="rotate(4.503073)" />
+      <rect
+         style="fill:#e6e6e6;fill-opacity:1;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect55"
+         width="265.00967"
+         height="29.329826"
+         x="224.98978"
+         y="276.65604"
+         ry="4.7116628"
+         transform="rotate(4.503073)" />
+    </g>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="ArchivoB"
+     transform="translate(0,-0.49974662)">
+    <rect
+       style="fill:#71c837;stroke-width:1.17379"
+       id="rect13"
+       width="254.16667"
+       height="353.35107"
+       x="-434.28607"
+       y="45.33366"
+       ry="28.236307"
+       transform="matrix(-0.99713842,-0.07559748,-0.06950505,0.9975816,0,0)"
+       inkscape:label="FondoB" />
+    <g
+       id="g51"
+       inkscape:label="Tabla"
+       transform="matrix(0.78125439,0,0,0.7836054,27.999822,27.301539)">
+      <rect
+         style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect42"
+         width="126.5865"
+         height="32.039265"
+         x="226.00436"
+         y="194.6731"
+         ry="4.7116628"
+         transform="rotate(4.503073)" />
+      <rect
+         style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect43"
+         width="126.5865"
+         height="32.039265"
+         x="361.46719"
+         y="194.6989"
+         ry="4.7116628"
+         transform="rotate(4.503073)" />
+      <rect
+         style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect44"
+         width="126.5865"
+         height="32.039265"
+         x="224.89883"
+         y="236.96274"
+         ry="4.7116628"
+         transform="rotate(4.503073)" />
+      <rect
+         style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect45"
+         width="126.5865"
+         height="32.039265"
+         x="362.21741"
+         y="236.23077"
+         ry="4.7116628"
+         transform="rotate(4.503073)" />
+      <rect
+         style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect46"
+         width="265.00967"
+         height="29.329826"
+         x="224.98978"
+         y="276.65604"
+         ry="4.7116628"
+         transform="rotate(4.503073)" />
+    </g>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="Texto">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:62.1199px;font-family:'Segoe UI';-inkscape-font-specification:'Segoe UI, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#000000;stroke:#000000;stroke-width:5.17666;stroke-opacity:1"
+       x="93.112389"
+       y="329.43021"
+       id="text13"
+       transform="matrix(0.99618824,0.06809176,-0.06788746,0.99918608,0,0)"
+       inkscape:label="TextoComparer"><tspan
+         sodipodi:role="line"
+         x="93.112389"
+         y="329.43021"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:62.1199px;font-family:'Segoe UI';-inkscape-font-specification:'Segoe UI, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;stroke:#000000;stroke-width:5.17666"
+         id="tspan15">COMPARER</tspan></text>
+  </g>
 </svg>
